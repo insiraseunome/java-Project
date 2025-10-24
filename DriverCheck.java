@@ -7,12 +7,12 @@ public class DriverCheck {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("Driver não encontrado: " + e.getMessage());
+            System.out.println("Driver not found: " + e.getMessage());
         }
 
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
-            System.out.println("Driver encontrado: " + drivers.nextElement().getClass().getName());
+            System.out.println("Driver: " + drivers.nextElement().getClass().getName());
         }
     }
 }
