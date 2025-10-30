@@ -1,3 +1,5 @@
+// Entry point of the application. Initializes the system and tests database connection.
+
 import inventory.configs.Database;
 import java.sql.Connection;
 

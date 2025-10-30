@@ -1,5 +1,5 @@
 package inventory.configs;
-
+// Responsible for establishing the JDBC connection to the MySQL database.
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

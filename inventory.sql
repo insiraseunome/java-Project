@@ -1,3 +1,5 @@
+-- SQL script to create and populate the inventory database schema.
+
 CREATE TABLE Category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
