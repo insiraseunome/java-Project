@@ -5,12 +5,12 @@ package inventory.models;
 public class Supplier {
     private int id;
     private String name;
-    private String contact_info;
+    private String contactInfo;
 
-    public Supplier(int id, String name, String contact_info) {
+    public Supplier(int id, String name, String contactInfo) {
         this.id = id;
         this.name = name;
-        this.contact_info = contact_info;
+        this.contactInfo = contactInfo;
     }
 
     public int getId(int id){
@@ -21,8 +21,8 @@ public class Supplier {
         return this.name;
     }
 
-    public String getContact(String contact_info){
-        return this.contact_info;
+    public String getContact(String contactInfo){
+        return this.contactInfo;
     }
 
     public void setId(int id) {
@@ -33,7 +33,7 @@ public class Supplier {
         this.name = name;
     }
 
-    public void setContact(String contact_info) {
-        this.contact_info = contact_info;
+    public void setContact(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 }

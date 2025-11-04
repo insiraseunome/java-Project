@@ -2,58 +2,70 @@ package inventory.models;
 // Represents the movement table from the MySQL database.
 // Contains fields, constructors, getters, and setters.
 
+import java.time.LocalDateTime;
+
 public class Movement {
     private int id;
-    private String name;
-    private int product_id;
-    private int user_id;
-    private String contact_info;
+    private int productId;
+    private int userId;
+    private String type;
+    private int quantity;
+    private LocalDateTime date;
 
-    public Movement(int id, String name, int product_id, int user_id, String contact_info) {
+    public Movement(int id, int productId, int userId, String type, int quantity, LocalDateTime date) {
         this.id = id;
-        this.name = name;
-        this.product_id = product_id;
-        this.user_id = user_id;
-        this.contact_info = contact_info;
+        this.productId = productId;
+        this.userId = userId;
+        this.type = type;
+        this.quantity = quantity;
+        this.date = date;
     }
 
-    public int getId(int id){
+    public int getId(){
         return this.id;
     }
 
-    public String getName(String name){
-        return this.name;
+    public int getProductId(){
+        return this.productId;
     }
 
-    public int getproduct_id(int product_id){
-        return this.product_id;
+    public int getUserId(){
+        return this.userId;
     }
 
-    public int getuser_id(int user_id){
-        return this.user_id;
+    public String getType(){
+        return this.type;
     }
 
-    public String getContact(String contact_info){
-        return this.contact_info;
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    public LocalDateTime getDate(){
+        return this.date;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductId(int productId){
+        this.productId = productId;
     }
 
-    public void setproduct_id(int product_id){
-        this.product_id = product_id;
+    public void setUserId(int userId){
+        this.userId = userId;
     }
 
-    public void setuser_id(int user_id){
-        this.user_id = user_id;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setContact(String contact_info) {
-        this.contact_info = contact_info;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

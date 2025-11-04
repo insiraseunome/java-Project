@@ -1,1 +1,5 @@
+.vscode/
 *.class
+*.bak
+*.tmp
+*.temp

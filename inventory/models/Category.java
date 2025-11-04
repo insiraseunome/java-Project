@@ -13,15 +13,15 @@ public class Category {
         this.description = description;
     }
 
-    public int getId(int id){
+    public int getId(){
         return this.id;
     }
 
-    public String getName(String name){
+    public String getName(){
         return this.name;
     }
 
-    public String getDescription(String description){
+    public String getDescription(){
         return this.description;
     }
 

@@ -17,6 +17,6 @@ public class DriverCheck {
     }
 }
 /*
- * javac -cp ".;lib/mysql-connector-j-9.5.0.jar" DriverCheck.java
- * java -cp ".;lib/mysql-connector-j-9.5.0.jar" DriverCheck
- */
+javac -cp ".;lib/mysql-connector-j-9.5.0.jar" DriverCheck.java
+java -cp ".;lib/mysql-connector-j-9.5.0.jar" DriverCheck
+*/

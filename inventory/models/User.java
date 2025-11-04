@@ -2,26 +2,28 @@ package inventory.models;
 // Represents the user table from the MySQL database.
 // Contains fields, constructors, getters, and setters.
 
+import java.math.BigDecimal;
+
 public class User {
     private int id;
     private String name;
-    private Float balance;
+    private BigDecimal balance;
 
-    public User(int id, String name, Float balance) {
+    public User(int id, String name, BigDecimal balance) {
         this.id = id;
         this.name = name;
         this.balance = balance;
     }
 
-    public int getId(int id){
+    public int getId(){
         return this.id;
     }
 
-    public String getName(String name){
+    public String getName(){
         return this.name;
     }
 
-    public Float getBalance(Float balance){
+    public BigDecimal getBalance(){
         return this.balance;
     }
 
@@ -33,7 +35,7 @@ public class User {
         this.name = name;
     }
 
-    public void setBalance(Float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }
