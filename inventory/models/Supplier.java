@@ -13,15 +13,15 @@ public class Supplier {
         this.contactInfo = contactInfo;
     }
 
-    public int getId(int id){
+    public int getId(){
         return this.id;
     }
 
-    public String getName(String name){
+    public String getName(){
         return this.name;
     }
 
-    public String getContact(String contactInfo){
+    public String getContact(){
         return this.contactInfo;
     }
 
