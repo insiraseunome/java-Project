@@ -10,11 +10,12 @@ import java.util.List;
 
 import inventory.configs.Database;
 import inventory.exceptions.InventoryException;
+import inventory.interfaces.CrudRepository;
 import inventory.models.User;
 
-public class UserRepository {
+public class UserRepository implements CrudRepository<User> {
 
-    public User createUser(User user){
+    public User create(User user){
         String query = "INSERT INTO User (name, balance) VALUES (?, ?)";
         try (Connection conn = Database.connect();
             PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -30,7 +31,7 @@ public class UserRepository {
         return user;
     }
 
-    public User getUserById(int id) {
+    public User findById(int id) {
         String query = "SELECT * FROM User WHERE id = ?";
         try (Connection conn = Database.connect();
             PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -75,7 +76,7 @@ public class UserRepository {
         }
     }
 
-    public boolean updateUserById(int id, User user){
+    public boolean update(int id, User user){
         String query = "UPDATE User SET name = ?, balance = ? WHERE id = ?";
         try (Connection conn = Database.connect();
             PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -89,7 +90,7 @@ public class UserRepository {
         }
     }
 
-    public boolean deleteUserById(int id){
+    public boolean delete(int id){
         String query = "DELETE FROM User WHERE id = ?";
         try (Connection conn = Database.connect();
             PreparedStatement stmt = conn.prepareStatement(query)) {

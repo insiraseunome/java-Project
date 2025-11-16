@@ -1,8 +1,7 @@
 package inventory.interfaces;
-/*
-import java.lang.Runnable;
 
-interface RunnableTask {
+public interface RunnableTask {
+    
+    void run();
 
 }
-*/
