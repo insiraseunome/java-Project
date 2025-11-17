@@ -2,138 +2,141 @@ package inventory.repository;
 
 import inventory.models.Product;
 import inventory.exceptions.InventoryException;
+import inventory.interfaces.CrudRepository;
 import inventory.configs.Database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRepository {
-
+public class ProductRepository implements CrudRepository<Product>{
     
     public Product create(Product product) {
-        String sql = "INSERT INTO Product (name, price, quantity, categoryId, supplierId) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        String query = """
+                        INSERT INTO Product (name, price, quantity, category_id, supplier_id)
+                        VALUES (?, ?, ?, ?, ?)
+                       """;
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, product.getName());
             stmt.setBigDecimal(2, product.getPrice());
             stmt.setInt(3, product.getQuantity());
             stmt.setInt(4, product.getCategoryId());
             stmt.setInt(5, product.getSupplierId());
-
             stmt.executeUpdate();
-
-            
             ResultSet rs = stmt.getGeneratedKeys();
-
             if (rs.next()) {
-
                 product.setId(rs.getInt(1));
-
             }
-
             return product;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao criar produto: " + e.getMessage());
-
+            throw new InventoryException("Failed to create product: ", e);
         }
-
     }
-
     
-    public Product getProductById(int id) {
-        String sql = "SELECT * FROM Product WHERE id = ?";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+    @Override
+    public Product findById(int id) {
+        String query = "SELECT * FROM Product WHERE id = ?";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
-            if (!rs.next()) return null;
-
-            return new Product(
-
+            if (rs.next()) {
+                return new Product(
                     rs.getInt("id"),
                     rs.getString("name"),
                     rs.getBigDecimal("price"),
                     rs.getInt("quantity"),
-                    rs.getInt("categoryId"),
-                    rs.getInt("supplierId")
-            );
-
+                    rs.getInt("category_id"),
+                    rs.getInt("supplier_id")
+                );
+            }
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao buscar produto: " + e.getMessage());
-
+            throw new InventoryException("Failed to find product: ", e);
         }
-
+        return null;
     }
-
     
     public List<Product> getProductsByName(String name) {
-        String sql = "SELECT * FROM Product WHERE name LIKE ?";
+        String query = "SELECT * FROM Product WHERE name LIKE ?";
         List<Product> products = new ArrayList<>();
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, "%" + name + "%");
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-
                 products.add(new Product(
-
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getBigDecimal("price"),
-                        rs.getInt("quantity"),
-                        rs.getInt("categoryId"),
-                        rs.getInt("supplierId")
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getBigDecimal("price"),
+                    rs.getInt("quantity"),
+                    rs.getInt("category_id"),
+                    rs.getInt("supplier_id")
                 ));
-
             }
-
             return products;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao buscar produtos por nome: " + e.getMessage());
-
+            throw new InventoryException("Failed to search all products: ", e);
         }
     }
 
-    
+    public List<Product> findAll() {
+        String query = "SELECT * FROM Product";
+        List<Product> products = new ArrayList<>();
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getBigDecimal("price"),
+                    rs.getInt("quantity"),
+                    rs.getInt("category_id"),
+                    rs.getInt("supplier_id")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new InventoryException("Failed to list products: ", e);
+        }
+        return products;
+    }
+
     public boolean update(int id, Product product) {
-        String sql = """
-            UPDATE Product 
-            SET name=?, price=?, quantity=?, categoryId=?, supplierId=? 
-            WHERE id=? """;
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        String query = """
+                        UPDATE Product 
+                        SET name=?, price=?, quantity=?, category_id=?, supplier_id=? 
+                        WHERE id=?
+                       """;
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, product.getName());
             stmt.setBigDecimal(2, product.getPrice());
             stmt.setInt(3, product.getQuantity());
             stmt.setInt(4, product.getCategoryId());
             stmt.setInt(5, product.getSupplierId());
             stmt.setInt(6, id);
-
             int updated = stmt.executeUpdate();
             return updated > 0;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao atualizar produto: " + e.getMessage());
-
+            throw new InventoryException("Failed to update product: ", e);
         }
-        
     }
 
+    @Override
+    public boolean delete(int id) {
+        String query = "DELETE FROM Product WHERE id = ?";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            throw new InventoryException("Failed to delete product: ", e);
+        }
+    }
 }

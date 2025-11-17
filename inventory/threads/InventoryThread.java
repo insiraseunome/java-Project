@@ -1,54 +1,42 @@
 package inventory.threads;
-// Background thread for syncing inventory data or handling scheduled tasks.
-// Can be used to periodically check stock levels, log activity, or trigger automated movements.
 
 import inventory.repository.ProductRepository;
 import inventory.models.Product;
 import inventory.utils.GeneralUtils;
 import java.util.List;
 
-
-
 public class InventoryThread implements Runnable {
     
-    private int intervalSeconds;
+    private int checkIntervalSeconds;
+    private ProductRepository productRepository;
+    private boolean isRunning = true;
 
-    private ProductRepository productRepo;
-    
-    public InventoryThread(ProductRepository productRepo, int intervalSeconds) {
+    public InventoryThread(ProductRepository productRepository, int checkIntervalSeconds, boolean isRunning) {
+        this.productRepository = productRepository;
+        this.checkIntervalSeconds = checkIntervalSeconds;
+        this.isRunning = isRunning;
+    }
 
-        this.productRepo = productRepo;
-        this.intervalSeconds = intervalSeconds;
-
+    public void stop() {
+        isRunning = false;
     }
     
     @Override
     public void run() {
-
-        GeneralUtils.log("InventoryThread iniciado. Intervalo: " + intervalSeconds + " segundos.");
-
-        while (true) {
-
+        GeneralUtils.log("InventoryThread initialized. Interval: " + checkIntervalSeconds + " seconds.");
+        while (isRunning) {
             try {
-
-                Thread.sleep(intervalSeconds * 1000);
-
-                List<Product> products = productRepo.getAllProducts();
-
+                Thread.sleep(checkIntervalSeconds * 1000);
+                List<Product> products = productRepository.findAll();
                 for (Product p : products) {
-
-                    if (p.getQuantity() <=5) {
-
-                        GeneralUtils.log("Estoque baixo: Produto " + p.getName() + " com quantidade " + p.getQuantity());
-
+                    if (p.getQuantity() <= 5) {
+                        GeneralUtils.log("Low stock: Product " + p.getName() + "\t Quantity: " + p.getQuantity());
                     }
-
                 }
-   
-            }   
-
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                stop();
+            }
         }
-
     }
-
 }

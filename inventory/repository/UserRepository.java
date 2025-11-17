@@ -1,17 +1,17 @@
 package inventory.repository;
 // Provides CRUD operations for the user model using JDBC.
 
+import inventory.configs.Database;
+import inventory.exceptions.InventoryException;
+import inventory.interfaces.CrudRepository;
+import inventory.models.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import inventory.configs.Database;
-import inventory.exceptions.InventoryException;
-import inventory.interfaces.CrudRepository;
-import inventory.models.User;
 
 public class UserRepository implements CrudRepository<User> {
 
@@ -59,7 +59,6 @@ public class UserRepository implements CrudRepository<User> {
             ResultSet rs = stmt.executeQuery();
             List<User> users = new ArrayList<>();
             while (rs.next()) {
-                // return all users when match the name
                 users.add(new User(
                     rs.getInt("id"),
                     rs.getString("name"),

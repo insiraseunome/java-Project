@@ -2,174 +2,115 @@ package inventory.repository;
 
 import inventory.models.Supplier;
 import inventory.exceptions.InventoryException;
+import inventory.interfaces.CrudRepository;
 import inventory.configs.Database;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class SupplierRepository {
+public class SupplierRepository implements CrudRepository<Supplier>{
 
-    
     public Supplier create(Supplier supplier) {
-        String sql = "INSERT INTO Supplier (name, contactInfo) VALUES (?, ?)";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+        String query = "INSERT INTO Supplier (name, contact_info) VALUES (?, ?)";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, supplier.getName());
             stmt.setString(2, supplier.getContact());
             stmt.executeUpdate();
-
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 supplier.setId(rs.getInt(1));
             }
-
             return supplier;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao criar fornecedor: " + e.getMessage());
-
+            throw new InventoryException("Failed to create supplier: ", e);
         }
-
     }
-
     
     public Supplier findById(int id) {
-        String sql = "SELECT * FROM Supplier WHERE id = ?";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        String query = "SELECT * FROM Supplier WHERE id = ?";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (!rs.next()) return null;
-
             return new Supplier(
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getString("contactInfo")
+                    rs.getString("contact_info")
             );
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao buscar fornecedor por ID: " + e.getMessage());
-
+            throw new InventoryException("Failed to find supplier: ", e);
         }
-
     }
-
 
     public List<Supplier> findAll() {
-        String sql = "SELECT * FROM Supplier";
+        String query = "SELECT * FROM Supplier";
         List<Supplier> suppliers = new ArrayList<>();
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-
                 suppliers.add(new Supplier(
-
                         rs.getInt("id"),
                         rs.getString("name"),
-                        rs.getString("contactInfo")
+                        rs.getString("contact_info")
                 ));
-
             }
-
             return suppliers;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao listar fornecedores: " + e.getMessage());
-
+            throw new InventoryException("Failed to list suppliers: ", e);
         }
-
     }
 
-    
     public boolean update(int id, Supplier supplier) {
-        String sql = "UPDATE Supplier SET name = ?, contactInfo = ? WHERE id = ?";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        String query = "UPDATE Supplier SET name = ?, contact_info = ? WHERE id = ?";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, supplier.getName());
             stmt.setString(2, supplier.getContact());
             stmt.setInt(3, id);
-
             int rows = stmt.executeUpdate();
             return rows > 0;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao atualizar fornecedor: " + e.getMessage());
-
+            throw new InventoryException("Failed to update supplier: ", e);
         }
-
     }
-
    
     public boolean delete(int id) {
-        String sql = "DELETE FROM Supplier WHERE id = ?";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        String query = "DELETE FROM Supplier WHERE id = ?";
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             int rows = stmt.executeUpdate();
             return rows > 0;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao deletar fornecedor: " + e.getMessage());
-
+            throw new InventoryException("Failed to delete supplier: ", e);
         }
-
     }
 
-    
     public List<Supplier> filterByName(String name) {
-        String sql = "SELECT * FROM Supplier WHERE name LIKE ?";
+        String query = "SELECT * FROM Supplier WHERE name LIKE ?";
         List<Supplier> suppliers = new ArrayList<>();
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, "%" + name + "%");
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-
                 suppliers.add(new Supplier(
-
                         rs.getInt("id"),
                         rs.getString("name"),
-                        rs.getString("contactInfo")
+                        rs.getString("contact_info")
                 ));
-
             }
-
             return suppliers;
-
         } catch (SQLException e) {
-
-            throw new InventoryException("Erro ao filtrar fornecedores por nome: " + e.getMessage());
-
+            throw new InventoryException("Failed to filter suppliers by name: ", e);
         }
-
     }
-
-    
-    public List<Supplier> filterByPriceRange(BigDecimal min, BigDecimal max) {
-        return new ArrayList<>(); 
-
-    }
-
 }

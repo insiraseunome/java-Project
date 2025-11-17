@@ -8,34 +8,24 @@ import java.math.BigDecimal;
 public class GeneralUtils {
     
     public static String formatDate(LocalDateTime date){
-
         try{
-
             DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
             return date.format(formater);
-
         } catch (Exception e) {
-
             e.printStackTrace();
             return null;
-
         }
-
     }
 
     public static void log(String message){
-
         System.out.println("[LOG] " + message);
-
     }
 
     public static boolean isValidPrice(BigDecimal price){
-
         if(price == null || price.compareTo(BigDecimal.ZERO) < 0){
             return false;
         }
         return true;
-
     }
 
     public static boolean isValidName(String name){
@@ -43,7 +33,5 @@ public class GeneralUtils {
             return false;
         }
         return true;
-
     }
-
 }

@@ -19,6 +19,7 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.categoryId = categoryId;
+        this.supplierId = supplierId;
     }
 
     public int getId(){
@@ -37,11 +38,11 @@ public class Product {
         return this.quantity;
     }
 
-    public int getContact(){
+    public int getCategoryId(){
         return this.categoryId;
     }
 
-    public int getSupplier() {
+    public int getSupplierId() {
         return this.supplierId;
     }
 
@@ -61,11 +62,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public void setContact(int categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
-    public void setSupplier(int supplierId) {
+    public void setSupplierId(int supplierId) {
         this.supplierId = supplierId;
     }
 }

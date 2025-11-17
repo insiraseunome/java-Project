@@ -6,4 +6,3 @@ public class InventoryException extends RuntimeException {
         super(message, cause);
     }
 }
-
