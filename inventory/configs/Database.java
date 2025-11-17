@@ -1,13 +1,14 @@
 package inventory.configs;
 // Responsible for establishing the JDBC connection to the MySQL database.
+
+import inventory.exceptions.InventoryException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import inventory.exceptions.InventoryException;
-
 public class Database {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/inventory?useSSL=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/********";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "*******";
 

@@ -1,11 +1,4 @@
-# Java Inventory System
-
-This project is a simple inventory management system built with Java and MySQL.
-
-## Structure
-- `configs/`: Database connection setup
-- `models/`: Entity classes representing database tables
-- `repository/`: Data access layer (CRUD operatio# Sistema de Estoque de Capinha de Celular em Java
+# Sistema de Estoque de Capinha de Celular em Java
 
 Este projeto tem como propósito criar um sistema de estoque para gerenciar capinhas de celular de uma loja, no qual possui vários modelos para atender diferentes aparelhos. O sistema utiliza Java e MySQL.
 
@@ -48,7 +41,7 @@ Este projeto tem como propósito criar um sistema de estoque para gerenciar capi
 
 - **`Main.java`:** Ponto de entrada da aplicação. Inicializa o sistema e testa a conexão com o banco de dados.
 
-- **`README.md`:** Documento principal de explicação do projeto (relatório).ns)
+- **`README.md`:** Documento principal de explicação do projeto (relatório)
 - `exceptions/`: Custom exception handling
 - `threads/`: Background tasks and sync operations
 - `utils/`: Helper classes for formatting, validation, etc.

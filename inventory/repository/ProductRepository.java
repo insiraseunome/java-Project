@@ -32,6 +32,7 @@ public class ProductRepository implements CrudRepository<Product>{
             if (rs.next()) {
                 product.setId(rs.getInt(1));
             }
+            System.out.println("Product created successfully: " + product.getName());
             return product;
         } catch (SQLException e) {
             throw new InventoryException("Failed to create product: ", e);

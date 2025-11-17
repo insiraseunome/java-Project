@@ -27,6 +27,7 @@ public class CategoryRepository implements CrudRepository<Category> {
             if (rs.next()) {
                 category.setId(rs.getInt(1));
             }
+            System.out.println("Category created successfully: " + category.getName());
             return category;
         } catch (SQLException e) {
             throw new InventoryException("Failed to create category: ", e);

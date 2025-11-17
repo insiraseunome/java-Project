@@ -26,6 +26,7 @@ public class SupplierRepository implements CrudRepository<Supplier>{
             if (rs.next()) {
                 supplier.setId(rs.getInt(1));
             }
+            System.out.println("Supplier created successfully: " + supplier.getName());
             return supplier;
         } catch (SQLException e) {
             throw new InventoryException("Failed to create supplier: ", e);
