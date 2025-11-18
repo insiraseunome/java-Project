@@ -6,7 +6,7 @@ Este projeto tem como objetivo desenvolver um sistema de controle de estoque par
 
 O diagrama abaixo representa as principais entidades do sistema e suas relações:
 
-![alt text](image-1.png)
+![alt text](image.png)
 
 #### Estrutura do Projeto
 
