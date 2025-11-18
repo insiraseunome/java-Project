@@ -10,20 +10,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository implements CrudRepository<User> {
 
     public User create(User user){
-        String query = "INSERT INTO User (name, balance) VALUES (?, ?)";
-        try (Connection conn = Database.connect();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+    String query = "INSERT INTO User (name, balance) VALUES (?, ?)";
+    try (Connection conn = Database.connect();
+         PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, user.getName());
             stmt.setBigDecimal(2, user.getBalance());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
-                System.out.println("User created successfuly: " + user.getName());
+                ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    user.setId(rs.getInt(1));
+                }
+                System.out.println("User created successfully: " + user.getName());
             }
         } catch (SQLException e) {
             throw new InventoryException("Failed to create user: ", e);

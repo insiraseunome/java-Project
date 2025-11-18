@@ -16,6 +16,7 @@ import java.util.List;
 
 public class MovementRepository implements CrudRepository<Movement> {
 
+    @Override
     public Movement create(Movement movement) {
         String query = """
                         INSERT INTO Movement (product_id, user_id, type, quantity, date)
@@ -33,12 +34,14 @@ public class MovementRepository implements CrudRepository<Movement> {
             if (rs.next()) {
                 movement.setId(rs.getInt(1));
             }
+            System.out.println("Movement created successfully: " + movement.getId());
             return movement;
         } catch (SQLException e) {
-            throw new InventoryException("Failed to create movement: ", e);
+            throw new InventoryException("Failed to create movement: " + e.getMessage(), e);
         }
     }
 
+    @Override
     public Movement findById(int id) {
         String query = "SELECT * FROM Movement WHERE id = ?";
         try (Connection conn = Database.connect();
@@ -57,10 +60,10 @@ public class MovementRepository implements CrudRepository<Movement> {
             }
             return null;
         } catch (SQLException e) {
-            throw new InventoryException("Failed to find movement: ", e);
+            throw new InventoryException("Failed to find movement: " + e.getMessage(), e);
         }
     }
-   
+
     public List<Movement> findAll() {
         List<Movement> list = new ArrayList<>();
         String query = "SELECT * FROM Movement ORDER BY date DESC";
@@ -79,16 +82,17 @@ public class MovementRepository implements CrudRepository<Movement> {
             }
             return list;
         } catch (SQLException e) {
-            throw new InventoryException("Failed to list movements: ", e);
+            throw new InventoryException("Failed to list movements: " + e.getMessage(), e);
         }
     }
 
+    @Override
     public boolean update(int id, Movement movement) {
         String query = """
-                        UPDATE Movement 
-                        SET product_id = ?, user_id = ?, type = ?, quantity = ?, date = ? 
-                        WHERE id = ?
-                       """;
+            UPDATE Movement
+            SET product_id = ?, user_id = ?, type = ?, quantity = ?, date = ?
+            WHERE id = ?
+        """;
         try (Connection conn = Database.connect();
             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, movement.getProductId());
@@ -99,10 +103,11 @@ public class MovementRepository implements CrudRepository<Movement> {
             stmt.setInt(6, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new InventoryException("Failed to update movement: ", e);
+            throw new InventoryException("Failed to update movement: " + e.getMessage(), e);
         }
     }
 
+    @Override
     public boolean delete(int id) {
         String query = "DELETE FROM Movement WHERE id = ?";
         try (Connection conn = Database.connect();
@@ -110,7 +115,7 @@ public class MovementRepository implements CrudRepository<Movement> {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new InventoryException("Failed to delete movement: ", e);
+            throw new InventoryException("Failed to delete movement: " + e.getMessage(), e);
         }
     }
 }

@@ -65,7 +65,6 @@ public class Main {
         Category category = categoryRepo.create(new Category(0, brand, brand + " phone cases"));
         Product product = new Product(0, brand + " " + model + " Case", price, quantity, category.getId(), supplier.getId());
         product = productRepo.create(product);
-
         return product;
     }
 
@@ -74,17 +73,17 @@ public class Main {
                                          UserRepository userRepo, ProductRepository productRepo,
                                          MovementRepository movementRepo) {
         BigDecimal totalPrice = product.getPrice().multiply(new BigDecimal(quantity));
-
+        System.out.println(">>> DEBUG: Creating movement");
+        System.out.println("User ID: " + user.getId());
+        System.out.println("Product ID: " + product.getId());                  
         if (user.getBalance().compareTo(totalPrice) >= 0 && product.getQuantity() >= quantity) {
             user.setBalance(user.getBalance().subtract(totalPrice));
             product.setQuantity(product.getQuantity() - quantity);
-
             userRepo.update(user.getId(), user);
             productRepo.update(product.getId(), product);
-
             Movement movement = new Movement(0, product.getId(), user.getId(), "BUY", quantity, java.time.LocalDateTime.now());
+            System.out.println("Creating movement with user_id=" + movement.getUserId() + " and product_id=" + movement.getProductId());
             movementRepo.create(movement);
-
             GeneralUtils.log("Purchase successful: " + user.getName() + " bought " + quantity + " " + product.getName());
         } else {
             GeneralUtils.log("Purchase failed for " + user.getName() + ": insufficient balance or stock.");
